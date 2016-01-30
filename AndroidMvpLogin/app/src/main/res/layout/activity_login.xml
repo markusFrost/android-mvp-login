@@ -7,13 +7,11 @@
     android:layout_marginTop="16dp"
     >
 
-    <EditText
+    <mvp.android.testfor.com.androidmvplogin.view.custom.EditText
         android:id="@+id/editUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:hint="@string/user_name"
-        android:drawablePadding="8dp"
         />
     <EditText
         android:id="@+id/editPassword"
