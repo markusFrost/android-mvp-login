@@ -8,20 +8,26 @@ import mvp.android.testfor.com.androidmvplogin.interfaces.OnLoginFinishedListene
 
 public class LoginInteractorImpl implements LoginInteractor {
 
+    private OnLoginFinishedListener mOnLoginFinishedListener;
+
+    public LoginInteractorImpl(OnLoginFinishedListener onLoginFinishedListener){
+        this.mOnLoginFinishedListener = onLoginFinishedListener;
+    }
+
     @Override
-    public void login(final String login, final String password, final OnLoginFinishedListener listener) {
+    public void login(final String login, final String password ) {
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(login)){
-                    listener.onLoginError();
+                    mOnLoginFinishedListener.onLoginError();
                 }
                 else if ( TextUtils.isEmpty(password)){
-                    listener.onPasswordError();
+                    mOnLoginFinishedListener.onPasswordError();
                 }
                 else{
-                    listener.onSuccess();
+                    mOnLoginFinishedListener.onSuccess();
                 }
             }
         };

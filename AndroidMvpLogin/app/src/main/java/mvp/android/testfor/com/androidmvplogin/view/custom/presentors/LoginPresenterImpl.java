@@ -11,7 +11,7 @@ public class LoginPresenterImpl implements LoginPresenter, OnLoginFinishedListen
 
     public LoginPresenterImpl(LoginView loginView){
         this.mLoginView = loginView;
-        this.mLoginInteractor = new LoginInteractorImpl();
+        this.mLoginInteractor = new LoginInteractorImpl(this);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class LoginPresenterImpl implements LoginPresenter, OnLoginFinishedListen
             mLoginView.showProgressBar();
         }
 
-        mLoginInteractor.login(login, password, this);
+        mLoginInteractor.login(login, password);
     }
 
     @Override
