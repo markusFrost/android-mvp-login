@@ -15,17 +15,22 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import mvp.android.testfor.com.androidmvplogin.interfaces.LoginPresenter;
+import mvp.android.testfor.com.androidmvplogin.interfaces.LoginView;
+import mvp.android.testfor.com.androidmvplogin.view.custom.presentors.LoginPresenterImpl;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements LoginView {
 
     @Bind(R.id.editUserName)
-    EditText editUserName;
+    EditText editLogin;
 
     @Bind(R.id.editPassword)
     EditText editPass;
 
     @Bind(R.id.pb)
     ProgressBar pb;
+
+    private LoginPresenter iLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,47 +39,37 @@ public class LoginActivity extends Activity {
 
         ButterKnife.bind(this);
 
+        iLoginPresenter = new LoginPresenterImpl(this);
+
     }
 
     @OnClick(R.id.btnLogIn)
     public void submit() {
-       fakeLoad(editUserName.getText().toString(), editPass.getText().toString());
+        iLoginPresenter.validateCredentials(editLogin.getText().toString(), editPass.getText().toString());
     }
 
-    private void showProgressBar(){
+    @Override
+    public void showProgressBar() {
         pb.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressBar(){
+    @Override
+    public void hideProgressBar() {
         pb.setVisibility(View.GONE);
     }
 
-    private void fakeLoad(final String login, final String password){
-        Handler handler = new Handler();
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                showProgressBar();
-                validateForm(login, password);
-                hideProgressBar();
-            }
-        };
-        handler.postDelayed(runnable, 2000);
+    @Override
+    public void setLoginError() {
+        Toast.makeText(LoginActivity.this, "login error", Toast.LENGTH_SHORT).show();
     }
 
-    private void validateForm(String login, String password){
-        if (TextUtils.isEmpty(login) && TextUtils.isEmpty(password)){
-            Toast.makeText(LoginActivity.this, "form is empty", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(login)) {
-            Toast.makeText(LoginActivity.this, "login is empty", Toast.LENGTH_SHORT).show();
-        }
-        else if ( TextUtils.isEmpty(password)){
-            Toast.makeText(LoginActivity.this, "pass is empty", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            startActivity(new Intent(LoginActivity.this, SecondActivity.class));
-        }
+    @Override
+    public void setPasswordError() {
+        Toast.makeText(LoginActivity.this, "password error", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void navigateToHome() {
+        startActivity(new Intent(LoginActivity.this, SecondActivity.class));
     }
 }
